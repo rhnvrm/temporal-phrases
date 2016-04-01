@@ -1,4 +1,3 @@
-
 class Time(object):
 
     def __init__(self):
@@ -72,3 +71,5 @@ class Time(object):
         return self.date
     def get_sdate(self):
         return str(self.date)
+    def get_human(self):
+        return self.get_hours() + self.get_min() + " hours, " + self.get_day() + ", " + self.get_date() + " " + self.get_month() + ", " + self.get_year()
