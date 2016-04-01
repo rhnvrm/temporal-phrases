@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 class Time(object):
 
     def __init__(self):
