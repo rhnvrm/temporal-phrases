@@ -19,21 +19,17 @@ def parse_sentence(input):
 
     sentence_type = 1
     important_words = []
-
+    timevalue = 0
 
     for pos in pos_tagged:
         val = pos[0].lower()
-        key = pos[1]
-
-        timevalue = 0
+        key = pos[1]        
 
         time = Time()
 
-        
-
         if(key == 'CD'):
             if(val.isdigit()):
-                timevalue = val
+                timevalue = int(val)
             else:
                 timevalue = w2n.word_to_num(val)
 
@@ -54,10 +50,47 @@ def parse_sentence(input):
                 important_words += [val]
                 sentence_type = 3
 
-    print(important_words)
+        if(val in ['hour', 'hours', 'minutes', 'minute', 'morning', 'evening']):
+            important_words += [val]
+
+    #print(important_words)
 
 
-    print(types_of_sentence[sentence_type], time.get_human())
+    if(sentence_type == 3):
+        #TODO: check if increment is required
+        time.inc_date()
+        #print(timevalue)
+        time.set_hours(timevalue)
+        time.set_min(0)
+        if('morning' in important_words):
+            if(time.get_ihours() > 12): time.update_hours(-12)
+        elif('evening' in important_words):
+            if(time.get_ihours() < 12): time.update_hours(12)
+        print(types_of_sentence[sentence_type], time.get_human())
+
+    if(sentence_type == 2):
+        delta = 0
+        if('next' in important_words): delta = 1
+        elif('last' in important_words): delta = -1
+
+        print(types_of_sentence[sentence_type], time.get_year(), time.get_iyear() + delta*timevalue)
+
+
+    if(sentence_type == 1):
+        if('hour' in important_words or 'hours' in important_words):
+            time.update_hours(timevalue)
+        elif('minute' in important_words or 'minutes' in important_words):
+            time.update_min(timevalue)
+
+        if('morning' in important_words):
+            if(time.get_ihours() > 12): time.update_hours(-12)
+        elif('evening' in important_words):
+            if(time.get_ihours() < 12): time.update_hours(12)
+        print(types_of_sentence[sentence_type], time.get_human())
+
+
+
+    
 
 
 
