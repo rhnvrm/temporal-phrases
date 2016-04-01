@@ -1,12 +1,3 @@
-#import timex
-import time
-import nltk
-import re
-
-
-from nltk import pos_tag, word_tokenize
-from datetime import datetime, timedelta
-from word2number import w2n
 
 class Time(object):
 
@@ -81,50 +72,3 @@ class Time(object):
         return self.date
     def get_sdate(self):
         return str(self.date)
-
-types_of_sentence = {0:'[unknown]', 1:'[tStamp]', 2:'[tPeriod]', 3:'[tRange]'}
-
-def parse_sentence(input):
-    #tx = timex.tag(input)
-    pos_tagged = nltk.pos_tag(word_tokenize(input))
-    print(pos_tagged)
-    time = Time()
-
-    type_of_sentence = types_of_sentence[0]
-
-    for pos in pos_tagged:
-        val = pos[0].lower()
-        key = pos[1]
-
-        timevalue = 0
-
-        if(key == 'CD'):
-            if(val.isdigit()):
-                timevalue = val
-            else:
-                timevalue = w2n.word_to_num(val)
-
-        if(key == 'IN'):
-        	print(val)
-
-
-
-
-
-
-examples = ["I want to book a cab 20 minutes from now", "Looking to a make reservation for two people day after tomorrow at seven in the evening", "I was working in san francisco for last two years", "Any time after 2 is fine", "Before 5 is good"]
-
-
-for e in examples:
-	#print(timex.tag(e))
-	#print(nltk.pos_tag(word_tokenize(e)))
-	parse_sentence(e)
-	print('==\n')
-
-'''
-1. I want to book a cab 20 minutes from now - [tStamp]2020 hrs, Thursday, July 20th
-2. Looking to a make reservation for two people day after tomorrow at seven in the evening - [tStamp]1900 hrs,Saturday
-3. I was working in san francisco for last two years - [tPeriod] - 2013-2015
-4. Any timer after 2 is fine - [tTrigger] - start - 0200 hrs,July 21st 2015
-5. Before 5 is good - [tTrigger] - start - now, 2000hrs, July 20th, 2015 : end - 0500 hrs, July 21st, 2015
-'''
